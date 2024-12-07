@@ -30,34 +30,38 @@ def is_almost_safe(report: List[int]) -> bool:
     if is_safe(report):
         return True
 
-    differences = [a - b for a,b in zip(report[:-1], report[1:])]
-    num_decreasing = sum(d > 0 for d in differences)
-    num_increasing = sum(d < 0 for d in differences)
-    num_non_gradual = sum(abs(d) < 1 or abs(d) > 3 for d in  differences)
+    # We can either remove every possible index and check for safety...
+    return any([is_safe(report[:index] + report[index+1:]) for index in range(len(report))])
 
-    is_almost_increasing = num_decreasing <= 1
-    is_almost_decreasing = num_increasing <= 1
-    is_almost_gradual = num_non_gradual <= 1
+    # ... or find the only possible level pair that causes the unsafeness
 
-    if (not is_almost_gradual):
-        return False
-
-    if (not is_almost_increasing and not is_almost_decreasing):
-        return False
-
-    bad_idx = None
-    if (num_non_gradual == 1):
-        bad_idx = [i for i, d in enumerate(differences) if abs(d) < 1 or abs(d) > 3][0]
-    elif (num_decreasing == 1):
-        bad_idx = [i for i, d in enumerate(differences) if d > 0][0]
-    elif (num_increasing == 1):
-        bad_idx = [i for i, d in enumerate(differences) if d < 0][0]
-
-    assert(isinstance(bad_idx, int))
-
-    # remove either the entry at index bad_idx or bad_idx + 1 (since their difference was unsafe
-    return is_safe(report[:bad_idx] + report[bad_idx+1:]) or is_safe(report[:bad_idx+1] + report[bad_idx+2:])
-
+    # differences = [a - b for a,b in zip(report[:-1], report[1:])]
+    # num_decreasing = sum(d > 0 for d in differences)
+    # num_increasing = sum(d < 0 for d in differences)
+    # num_non_gradual = sum(abs(d) < 1 or abs(d) > 3 for d in  differences)
+    #
+    # is_almost_increasing = num_decreasing <= 1
+    # is_almost_decreasing = num_increasing <= 1
+    # is_almost_gradual = num_non_gradual <= 1
+    #
+    # if (not is_almost_gradual):
+    #     return False
+    #
+    # if (not is_almost_increasing and not is_almost_decreasing):
+    #     return False
+    #
+    # bad_idx = None
+    # if (num_non_gradual == 1):
+    #     bad_idx = [i for i, d in enumerate(differences) if abs(d) < 1 or abs(d) > 3][0]
+    # elif (num_decreasing == 1):
+    #     bad_idx = [i for i, d in enumerate(differences) if d > 0][0]
+    # elif (num_increasing == 1):
+    #     bad_idx = [i for i, d in enumerate(differences) if d < 0][0]
+    #
+    # assert(isinstance(bad_idx, int))
+    #
+    # # remove either the entry at index bad_idx or bad_idx + 1 (since their difference was unsafe
+    # return is_safe(report[:bad_idx] + report[bad_idx+1:]) or is_safe(report[:bad_idx+1] + report[bad_idx+2:])
 
 def calculate_num_safe(reports: List[List[int]]) -> int:
     return sum(map(is_safe, reports))
