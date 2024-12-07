@@ -36,8 +36,8 @@ def part2(file_name: str) -> int:
 
 
 if __name__ == "__main__":
-    total_difference = part1("puzzle.txt")
-    print(f"Total distance between the two lists: {total_difference}")
+    result1 = part1("puzzle.txt")
+    print(f"Total distance between the two lists: {result1}")
 
-    similarity = part2("puzzle.txt")
-    print(f"Similarity score of the two lists: {similarity}")
+    result2 = part2("puzzle.txt")
+    print(f"Similarity score of the two lists: {result2}")
