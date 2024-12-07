@@ -1,6 +1,49 @@
-def part1():
-    print("hello")
+from collections import Counter
+from pathlib import Path
+from typing import List, Tuple
 
 
-if __name__ == '__main__':
-    part1()
+def read_input(file_name: str) -> List[str]:
+    file = Path(__file__).resolve().parent / file_name
+
+    with file.open("r") as f:
+        return f.readlines()
+
+
+def extract_lists(file_name: str) -> Tuple[List[int], List[int]]:
+    input = read_input(file_name)
+    lists = ([], [])
+
+    for line in input:
+        numbers = list(map(lambda s: int(s), line.split()))
+        lists[0].append(numbers[0])
+        lists[1].append(numbers[1])
+
+    return lists
+
+
+def calculate_differences(list1: List[int], list2: List[int]) -> int:
+    return sum(map(lambda x: abs(x[0] - x[1]), zip(sorted(list1), sorted(list2))))
+
+
+def calculate_similarity(list1: List[int], list2: List[int]) -> int:
+    occurrences = Counter(list2)
+    return sum(map(lambda x: x * occurrences[x], list1))
+
+
+def part1(file_name: str) -> int:
+    lists = extract_lists(file_name)
+    return calculate_differences(*lists)
+
+
+def part2(file_name: str) -> int:
+    lists = extract_lists(file_name)
+    return calculate_similarity(*lists)
+
+
+if __name__ == "__main__":
+    total_difference = part1("input1.txt")
+    print(f"Total distance between the two lists: {total_difference}")
+
+    similarity = part2("input1.txt")
+    print(f"Similarity score of the two lists: {similarity}")
