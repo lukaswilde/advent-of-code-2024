@@ -1,20 +1,14 @@
 from collections import Counter
-from pathlib import Path
 from typing import List, Tuple
 
-
-def read_input(file_name: str) -> List[str]:
-    file = Path(__file__).resolve().parent / file_name
-
-    with file.open("r") as f:
-        return f.readlines()
+from input import read_input
 
 
 def extract_lists(file_name: str) -> Tuple[List[int], List[int]]:
-    input = read_input(file_name)
+    input_text = read_input(file_name)
     lists = ([], [])
 
-    for line in input:
+    for line in input_text.splitlines():
         numbers = list(map(lambda s: int(s), line.split()))
         lists[0].append(numbers[0])
         lists[1].append(numbers[1])
