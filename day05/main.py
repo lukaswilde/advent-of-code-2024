@@ -1,17 +1,16 @@
 import copy
-import re
-from typing import List, Tuple, Set
+from typing import List, Set, Tuple
 
 from input import read_split_input
 
-class AdjacencyMatrix():
 
+class AdjacencyMatrix:
     def __init__(self, dimension: int):
         self.dimension = dimension
         self.matrix = [[0] * dimension for _ in range(dimension)]
 
     def fill(self, edges: List[Tuple[int, int]]):
-        for (x,y) in edges:
+        for x, y in edges:
             self.matrix[x][y] = 1
 
     @staticmethod
@@ -23,13 +22,15 @@ class AdjacencyMatrix():
 
     def get_submatrix(self, relevant_nodes: List[int]):
         submatrix = AdjacencyMatrix(len(relevant_nodes))
-        submatrix.matrix = [[self.matrix[node][idx] for idx in relevant_nodes] for node in relevant_nodes]
+        submatrix.matrix = [
+            [self.matrix[node][idx] for idx in relevant_nodes] for node in relevant_nodes
+        ]
         return submatrix
 
     def get_incoming(self, node: int):
         return [self.matrix[j][node] for j in range(self.dimension)]
 
-    def get_outgoing(self, node:int):
+    def get_outgoing(self, node: int):
         return self.matrix[node]
 
     def is_topologically_sorted(self) -> bool:
@@ -76,8 +77,8 @@ def extract_parts(file_name: str) -> Tuple[List[Tuple[int, int]], List[List[int]
     assert len(sections) == 2
     edge_list, page_list = sections[0], sections[1]
 
-    edges = [tuple(int(node) for node in edge.split("|", 1)) for edge in edge_list.splitlines()]
-    pages = [[int(page) for page in update.split(",")] for update in page_list.splitlines()]
+    edges = [tuple(int(node) for node in edge.split('|', 1)) for edge in edge_list.splitlines()]
+    pages = [[int(page) for page in update.split(',')] for update in page_list.splitlines()]
 
     return edges, pages
 
@@ -88,7 +89,7 @@ def calculate_sum_correct_middles(matrix: AdjacencyMatrix, pages: List[List[int]
         assert len(update) % 2 == 1
         submatrix = matrix.get_submatrix(update)
         if submatrix.is_topologically_sorted():
-            result += update[len(update)//2]
+            result += update[len(update) // 2]
 
     return result
 
@@ -101,7 +102,7 @@ def calculate_sum_incorrect_middles(matrix: AdjacencyMatrix, pages: List[List[in
         if not submatrix.is_topologically_sorted():
             correct_order = submatrix.sort_topologically()
             assert len(correct_order) % 2 == 1
-            middle_idx = correct_order[len(correct_order)//2]
+            middle_idx = correct_order[len(correct_order) // 2]
             result += update[middle_idx]
 
     return result
