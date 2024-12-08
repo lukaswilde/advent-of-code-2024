@@ -1,5 +1,4 @@
-from collections import Counter
-from typing import List, Tuple
+from typing import List
 
 from input import read_input
 
@@ -14,24 +13,26 @@ def extract_reports(file_name: str) -> List[List[int]]:
 
     return reports
 
+
 def is_safe(report: List[int]) -> bool:
     if len(report) == 1:
         return True
-    assert(len(report) > 1)
+    assert len(report) > 1
 
-    differences = [a - b for a,b in zip(report[:-1], report[1:])]
-    is_decreasing = all(d > 0 for d in  differences)
+    differences = [a - b for a, b in zip(report[:-1], report[1:])]
+    is_decreasing = all(d > 0 for d in differences)
     is_increasing = all(d < 0 for d in differences)
-    is_gradual = all(1 <= abs(d) <= 3 for d in  differences)
+    is_gradual = all(1 <= abs(d) <= 3 for d in differences)
 
     return is_gradual and (is_decreasing or is_increasing)
+
 
 def is_almost_safe(report: List[int]) -> bool:
     if is_safe(report):
         return True
 
     # We can either remove every possible index and check for safety...
-    return any([is_safe(report[:index] + report[index+1:]) for index in range(len(report))])
+    return any([is_safe(report[:index] + report[index + 1 :]) for index in range(len(report))])
 
     # ... or find the only possible level pair that causes the unsafeness
 
@@ -63,12 +64,14 @@ def is_almost_safe(report: List[int]) -> bool:
     # # remove either the entry at index bad_idx or bad_idx + 1 (since their difference was unsafe
     # return is_safe(report[:bad_idx] + report[bad_idx+1:]) or is_safe(report[:bad_idx+1] + report[bad_idx+2:])
 
+
 def calculate_num_safe(reports: List[List[int]]) -> int:
     return sum(map(is_safe, reports))
 
 
 def calculate_num_almost_safe(reports: List[List[int]]) -> int:
     return sum(map(is_almost_safe, reports))
+
 
 def part1(file_name: str) -> int:
     reports = extract_reports(file_name)
@@ -80,9 +83,9 @@ def part2(file_name: str) -> int:
     return calculate_num_almost_safe(reports)
 
 
-if __name__ == "__main__":
-    result1 = part1("puzzle.txt")
-    print(f"Total number of safe reports: {result1}")
+if __name__ == '__main__':
+    result1 = part1('puzzle.txt')
+    print(f'Total number of safe reports: {result1}')
 
-    result2 = part2("puzzle.txt")
-    print(f"Total number of almost safe reports: {result2}")
+    result2 = part2('puzzle.txt')
+    print(f'Total number of almost safe reports: {result2}')
