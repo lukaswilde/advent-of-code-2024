@@ -1,4 +1,5 @@
-from typing import List, Tuple
+from operator import add, mul
+from typing import Callable, List, Tuple
 
 from input import read_input
 
@@ -14,50 +15,40 @@ def extract_equations(file_name: str) -> List[Tuple[int, List[int]]]:
     return res
 
 
-def is_satisfiable_addmul(eq: Tuple[int, List[int]]) -> bool:
+def is_satisfiable(
+    eq: Tuple[int, List[int]], operators: Tuple[Callable[[int, int], int], ...] = (add, mul)
+) -> bool:
     test_val, rest = eq
+    assert len(rest) > 1
 
-    def is_satisfiable(rest: List[int], acc: int) -> bool:
+    def is_satisfiable_helper(rest: List[int], acc: int) -> bool:
         if acc > test_val:
             return False
         if len(rest) == 0:
             return test_val == acc
         next_operand = rest[0]
-        return is_satisfiable(rest[1:], acc + next_operand) or is_satisfiable(
-            rest[1:], acc * next_operand
-        )
 
-    assert len(rest) > 1
-    return is_satisfiable(rest[1:], rest[0])
+        # faster than any() with generator expression
+        # slower than just checking length of operator tuple and writing them out with 'or'
+        for op in operators:
+            if is_satisfiable_helper(rest[1:], op(acc, next_operand)):
+                return True
 
-
-def is_satisfiable_addmulconcat(eq: Tuple[int, List[int]]) -> bool:
-    test_val, rest = eq
-
-    def is_satisfiable(rest: List[int], acc: int) -> bool:
-        if acc > test_val:
-            return False
-        if len(rest) == 0:
-            return test_val == acc
-        next_operand = rest[0]
-        return (
-            is_satisfiable(rest[1:], acc + next_operand)
-            or is_satisfiable(rest[1:], acc * next_operand)
-            or is_satisfiable(rest[1:], int(str(acc) + str(next_operand)))
-        )
-
-    assert len(rest) > 1
-    return is_satisfiable(rest[1:], rest[0])
+    return is_satisfiable_helper(rest[1:], rest[0])
 
 
 def part1(file_name: str) -> int:
     equations = extract_equations(file_name)
-    return sum([eq[0] for eq in equations if is_satisfiable_addmul(eq)])
+    return sum([eq[0] for eq in equations if is_satisfiable(eq)])
 
 
 def part2(file_name: str) -> int:
+    def concat(x: int, y: int) -> int:
+        return int(str(x) + str(y))
+
     equations = extract_equations(file_name)
-    return sum([eq[0] for eq in equations if is_satisfiable_addmulconcat(eq)])
+    operators = (add, mul, concat)
+    return sum([eq[0] for eq in equations if is_satisfiable(eq, operators)])
 
 
 if __name__ == '__main__':
