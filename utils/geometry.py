@@ -1,13 +1,11 @@
 from enum import Enum
-from typing import Self
-
 
 class Point:
     def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
 
-    def __add__(self, other: Self):
+    def __add__(self, other):
         assert isinstance(other, Point)
         return Point(self.x + other.x, self.y + other.y)
 
