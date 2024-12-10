@@ -40,5 +40,4 @@ class Day01(Day):
 
 if __name__ == '__main__':
     day = Day01()
-    print(day.day_number)
     day.print_solution('puzzle.txt')
