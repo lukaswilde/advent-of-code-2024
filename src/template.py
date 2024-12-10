@@ -8,7 +8,15 @@ from input import get_project_root
 class Day(ABC):
     @property
     def day_number(self) -> int:
-        return int(type(self).__name__[-2:])
+        """
+        Assumes that the subclass of Day is called DayXX, and thus we can
+        extract the correct day number.
+        Otherwise, this property needs to be overwritten
+        """
+        try:
+            return int(type(self).__name__[-2:])
+        except ValueError:
+            raise ValueError("The class is not named DayXX, where XX is a 0-leading number.\nRename the class or overwrite the 'day_number' property." )
 
     @property
     def base_dir(self) -> Path:
