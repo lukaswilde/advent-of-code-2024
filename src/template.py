@@ -7,8 +7,8 @@ from input import get_project_root
 
 class Day(ABC):
     @property
-    @abstractmethod
-    def day_number(self) -> int: ...
+    def day_number(self) -> int:
+        return int(type(self).__name__[-2:])
 
     @property
     def base_dir(self) -> Path:

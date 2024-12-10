@@ -41,10 +41,6 @@ def is_satisfiable(
 
 
 class Day07(Day):
-    @property
-    def day_number(self) -> int:
-        return 7
-
     def part1(self, file_path: Path) -> int:
         equations = extract_equations(file_path)
         return sum([eq[0] for eq in equations if is_satisfiable(eq)])

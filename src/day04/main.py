@@ -54,10 +54,6 @@ def extract_crosses(file_path: Path) -> List[Tuple[str, str]]:
 
 
 class Day04(Day):
-    @property
-    def day_number(self) -> int:
-        return 4
-
     def part1(self, file_path: Path) -> int:
         possibilities = extract_xmas(file_path)
         return len([x for x in possibilities if x in ['XMAS', 'SAMX']])

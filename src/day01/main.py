@@ -29,10 +29,6 @@ def calculate_similarity(list1: List[int], list2: List[int]) -> int:
 
 
 class Day01(Day):
-    @property
-    def day_number(self) -> int:
-        return 1
-
     def part1(self, file_path: Path) -> int:
         lists = extract_lists(file_path)
         return calculate_differences(*lists)
@@ -44,4 +40,5 @@ class Day01(Day):
 
 if __name__ == '__main__':
     day = Day01()
+    print(day.day_number)
     day.print_solution('puzzle.txt')

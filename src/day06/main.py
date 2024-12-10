@@ -157,10 +157,6 @@ def extract_map(file_path: Path) -> Map:
 
 
 class Day06(Day):
-    @property
-    def day_number(self) -> int:
-        return 6
-
     def part1(self, file_path: Path) -> int:
         map = extract_map(file_path)
         return calculate_num_visited(map)

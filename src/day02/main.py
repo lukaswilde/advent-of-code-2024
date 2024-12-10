@@ -77,10 +77,6 @@ def calculate_num_almost_safe(reports: List[List[int]]) -> int:
 
 
 class Day02(Day):
-    @property
-    def day_number(self) -> int:
-        return 2
-
     def part1(self, file_path: Path) -> int:
         reports = extract_reports(file_path)
         return calculate_num_safe(reports)

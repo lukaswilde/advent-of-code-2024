@@ -37,10 +37,6 @@ def calculate_uncorrupted_conditional_sum(muls: List[str]) -> int:
 
 
 class Day03(Day):
-    @property
-    def day_number(self) -> int:
-        return 3
-
     def part1(self, file_path: Path) -> int:
         muls = extract_muls(file_path)
         return calculate_uncorrupted_sum(muls)

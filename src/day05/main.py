@@ -112,10 +112,6 @@ def calculate_sum_incorrect_middles(matrix: AdjacencyMatrix, pages: List[List[in
 
 
 class Day05(Day):
-    @property
-    def day_number(self) -> int:
-        return 5
-
     def part1(self, file_path: Path) -> int:
         edges, pages = extract_parts(file_path)
         matrix = AdjacencyMatrix.create_and_fill(edges)

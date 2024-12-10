@@ -73,10 +73,6 @@ def extract_antenna_map(file_path: Path) -> Map:
 
 
 class Day08(Day):
-    @property
-    def day_number(self) -> int:
-        return 8
-
     def part1(self, file_path: Path) -> int:
         map = extract_antenna_map(file_path)
         return calculate_unique_antinodes(map)
