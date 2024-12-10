@@ -1,21 +1,19 @@
 import copy
 from enum import Enum, auto
 
-from geometry import Direction, Point
+from geometry import Direction, Grid, Vec2d
 from input import read_input
 from tqdm import tqdm
 
 
-class Map:
+class Map(Grid):
     class Progress(Enum):
         EXIT = auto()
         CONTINUE = auto()
         CYCLE = auto()
 
     def __init__(self, repr: str):
-        lines = repr.splitlines()
-        self.width = len(lines[0])
-        self.height = len(lines)
+        super().__init__(repr)
 
         self.guard_facing = None
         self._guard_pos = None
@@ -27,24 +25,24 @@ class Map:
         # For part 2, remember whether tile was visited in the same direction before -> cycle
         self.visited_with_position = set()
 
-        for i, line in enumerate(lines):
+        for i, line in enumerate(self.lines):
             for j, char in enumerate(line):
                 match char:
                     case '.':
                         continue
                     case '#':
-                        self.obstacle_pos.add(Point(j, i))
+                        self.obstacle_pos.add(Vec2d(j, i))
                     case 'v':
-                        self._guard_pos = Point(j, i)
+                        self._guard_pos = Vec2d(j, i)
                         self._guard_facing = Direction.DOWN
                     case '>':
-                        self._guard_pos = Point(j, i)
+                        self._guard_pos = Vec2d(j, i)
                         self._guard_facing = Direction.RIGHT
                     case '<':
-                        self._guard_pos = Point(j, i)
+                        self._guard_pos = Vec2d(j, i)
                         self._guard_facing = Direction.LEFT
                     case '^':
-                        self._guard_pos = Point(j, i)
+                        self._guard_pos = Vec2d(j, i)
                         self._guard_facing = Direction.UP
 
         self.guard_facing = self._guard_facing
@@ -56,9 +54,9 @@ class Map:
         for j in range(self.height):
             line = ''
             for i in range(self.width):
-                if Point(i, j) in self.obstacle_pos:
+                if Vec2d(i, j) in self.obstacle_pos:
                     line += '#'
-                elif Point(i, j) == self.guard_pos:
+                elif Vec2d(i, j) == self.guard_pos:
                     line += str(self.guard_facing)
                 else:
                     line += '.'
@@ -82,16 +80,13 @@ class Map:
 
         return True
 
-    def out_of_bounds(self, p: Point) -> bool:
-        return p.x < 0 or p.y < 0 or p.x >= self.width or p.y >= self.height
-
     def reset(self):
         self.guard_facing = self._guard_facing
         self.guard_pos = self._guard_pos
         self.visited_with_position = {(self.guard_pos, self.guard_facing)}
         self.visited_tiles = {self.guard_pos}
 
-    def is_creating_cycle(self, new_obstacle_pos: Point) -> bool:
+    def is_creating_cycle(self, new_obstacle_pos: Vec2d) -> bool:
         if new_obstacle_pos == self.guard_pos:
             return False
         if new_obstacle_pos in self.obstacle_pos:
