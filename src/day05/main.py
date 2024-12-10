@@ -1,7 +1,10 @@
 import copy
+from pathlib import Path
 from typing import List, Set, Tuple
 
 from input import read_split_input
+
+from template import Day
 
 
 class AdjacencyMatrix:
@@ -72,8 +75,8 @@ class AdjacencyMatrix:
         return result
 
 
-def extract_parts(file_name: str) -> Tuple[List[Tuple[int, int]], List[List[int]]]:
-    sections = read_split_input(file_name)
+def extract_parts(file_path: Path) -> Tuple[List[Tuple[int, int]], List[List[int]]]:
+    sections = read_split_input(file_path)
     assert len(sections) == 2
     edge_list, page_list = sections[0], sections[1]
 
@@ -108,21 +111,22 @@ def calculate_sum_incorrect_middles(matrix: AdjacencyMatrix, pages: List[List[in
     return result
 
 
-def part1(file_name: str) -> int:
-    edges, pages = extract_parts(file_name)
-    matrix = AdjacencyMatrix.create_and_fill(edges)
-    return calculate_sum_correct_middles(matrix, pages)
+class Day05(Day):
+    @property
+    def day_number(self) -> int:
+        return 5
 
+    def part1(self, file_path: Path) -> int:
+        edges, pages = extract_parts(file_path)
+        matrix = AdjacencyMatrix.create_and_fill(edges)
+        return calculate_sum_correct_middles(matrix, pages)
 
-def part2(file_name: str) -> int:
-    edges, pages = extract_parts(file_name)
-    matrix = AdjacencyMatrix.create_and_fill(edges)
-    return calculate_sum_incorrect_middles(matrix, pages)
+    def part2(self, file_path: Path) -> int:
+        edges, pages = extract_parts(file_path)
+        matrix = AdjacencyMatrix.create_and_fill(edges)
+        return calculate_sum_incorrect_middles(matrix, pages)
 
 
 if __name__ == '__main__':
-    result1 = part1('puzzle.txt')
-    print(f'Total sum of middle page numbers in correct updates: {result1}')
-
-    result2 = part2('puzzle.txt')
-    print(f'Total sum of middle page numbers after sorting: {result2}')
+    day = Day05()
+    day.print_solution('puzzle.txt')

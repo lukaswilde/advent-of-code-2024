@@ -1,11 +1,14 @@
 from collections import Counter
+from pathlib import Path
 from typing import List, Tuple
 
 from input import read_input
 
+from template import Day
 
-def extract_lists(file_name: str) -> Tuple[List[int], List[int]]:
-    input_text = read_input(file_name)
+
+def extract_lists(file_path: Path) -> Tuple[List[int], List[int]]:
+    input_text = read_input(file_path)
     lists = ([], [])
 
     for line in input_text.splitlines():
@@ -25,19 +28,20 @@ def calculate_similarity(list1: List[int], list2: List[int]) -> int:
     return sum(map(lambda x: x * occurrences[x], list1))
 
 
-def part1(file_name: str) -> int:
-    lists = extract_lists(file_name)
-    return calculate_differences(*lists)
+class Day01(Day):
+    @property
+    def day_number(self) -> int:
+        return 1
 
+    def part1(self, file_path: Path) -> int:
+        lists = extract_lists(file_path)
+        return calculate_differences(*lists)
 
-def part2(file_name: str) -> int:
-    lists = extract_lists(file_name)
-    return calculate_similarity(*lists)
+    def part2(self, file_path: Path) -> int:
+        lists = extract_lists(file_path)
+        return calculate_similarity(*lists)
 
 
 if __name__ == '__main__':
-    result1 = part1('puzzle.txt')
-    print(f'Total distance between the two lists: {result1}')
-
-    result2 = part2('puzzle.txt')
-    print(f'Similarity score of the two lists: {result2}')
+    day = Day01()
+    day.print_solution('puzzle.txt')

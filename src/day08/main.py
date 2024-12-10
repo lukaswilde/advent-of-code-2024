@@ -1,8 +1,11 @@
 from collections import defaultdict
+from pathlib import Path
 from typing import List, Tuple
 
 from geometry import Grid, Vec2d
 from input import read_input
+
+from template import Day
 
 
 class Map(Grid):
@@ -64,24 +67,25 @@ def calculate_resonant_antinodes(map: Map) -> int:
     return len(resonant_antinodes)
 
 
-def extract_antenna_map(file_name: str) -> Map:
-    input_text = read_input(file_name)
+def extract_antenna_map(file_path: Path) -> Map:
+    input_text = read_input(file_path)
     return Map(input_text)
 
 
-def part1(file_name: str) -> int:
-    map = extract_antenna_map(file_name)
-    return calculate_unique_antinodes(map)
+class Day08(Day):
+    @property
+    def day_number(self) -> int:
+        return 8
 
+    def part1(self, file_path: Path) -> int:
+        map = extract_antenna_map(file_path)
+        return calculate_unique_antinodes(map)
 
-def part2(file_name: str) -> int:
-    map = extract_antenna_map(file_name)
-    return calculate_resonant_antinodes(map)
+    def part2(self, file_path: Path) -> int:
+        map = extract_antenna_map(file_path)
+        return calculate_resonant_antinodes(map)
 
 
 if __name__ == '__main__':
-    result1 = part1('puzzle.txt')
-    print(f'The total number of unique antinodes is: {result1}')
-
-    result2 = part2('puzzle.txt')
-    print(f'The total number of unique resonant antinodes is: {result2}')
+    day = Day08()
+    day.print_solution('puzzle.txt')

@@ -1,10 +1,13 @@
+from pathlib import Path
 from typing import List, Tuple
 
 from input import read_input
 
+from template import Day
 
-def extract_xmas(file_name: str) -> List[str]:
-    input_text = read_input(file_name)
+
+def extract_xmas(file_path: Path) -> List[str]:
+    input_text = read_input(file_path)
     lines = input_text.splitlines()
     width, height = len(lines[0]), len(lines)
     possibilities = []
@@ -32,8 +35,8 @@ def extract_xmas(file_name: str) -> List[str]:
     return possibilities
 
 
-def extract_crosses(file_name: str) -> List[Tuple[str, str]]:
-    input_text = read_input(file_name)
+def extract_crosses(file_path: Path) -> List[Tuple[str, str]]:
+    input_text = read_input(file_path)
     lines = input_text.splitlines()
     width, height = len(lines[0]), len(lines)
     possibilities = []
@@ -50,19 +53,22 @@ def extract_crosses(file_name: str) -> List[Tuple[str, str]]:
     return possibilities
 
 
-def part1(file_name: str) -> int:
-    possibilities = extract_xmas(file_name)
-    return len([x for x in possibilities if x in ['XMAS', 'SAMX']])
+class Day04(Day):
+    @property
+    def day_number(self) -> int:
+        return 4
 
+    def part1(self, file_path: Path) -> int:
+        possibilities = extract_xmas(file_path)
+        return len([x for x in possibilities if x in ['XMAS', 'SAMX']])
 
-def part2(file_name: str) -> int:
-    possibilities = extract_crosses(file_name)
-    return len([(a, b) for (a, b) in possibilities if a in ['MAS', 'SAM'] and b in ['MAS', 'SAM']])
+    def part2(self, file_path: Path) -> int:
+        possibilities = extract_crosses(file_path)
+        return len(
+            [(a, b) for (a, b) in possibilities if a in ['MAS', 'SAM'] and b in ['MAS', 'SAM']]
+        )
 
 
 if __name__ == '__main__':
-    result1 = part1('puzzle.txt')
-    print(f"Total number of 'XMAS' in input: {result1}")
-
-    result2 = part2('puzzle.txt')
-    print(f"Total number of 'X-MAS' crosses in input: {result2}")
+    day = Day04()
+    day.print_solution('puzzle.txt')

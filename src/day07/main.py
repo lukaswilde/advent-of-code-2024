@@ -1,11 +1,14 @@
 from operator import add, mul
+from pathlib import Path
 from typing import Callable, List, Tuple
 
 from input import read_input
 
+from template import Day
 
-def extract_equations(file_name: str) -> List[Tuple[int, List[int]]]:
-    input_text = read_input(file_name)
+
+def extract_equations(file_path: Path) -> List[Tuple[int, List[int]]]:
+    input_text = read_input(file_path)
     res = []
 
     for line in input_text.splitlines():
@@ -37,23 +40,24 @@ def is_satisfiable(
     return is_satisfiable_helper(rest[1:], rest[0])
 
 
-def part1(file_name: str) -> int:
-    equations = extract_equations(file_name)
-    return sum([eq[0] for eq in equations if is_satisfiable(eq)])
+class Day07(Day):
+    @property
+    def day_number(self) -> int:
+        return 7
 
+    def part1(self, file_path: Path) -> int:
+        equations = extract_equations(file_path)
+        return sum([eq[0] for eq in equations if is_satisfiable(eq)])
 
-def part2(file_name: str) -> int:
-    def concat(x: int, y: int) -> int:
-        return int(str(x) + str(y))
+    def part2(self, file_path: Path) -> int:
+        def concat(x: int, y: int) -> int:
+            return int(str(x) + str(y))
 
-    equations = extract_equations(file_name)
-    operators = (add, mul, concat)
-    return sum([eq[0] for eq in equations if is_satisfiable(eq, operators)])
+        equations = extract_equations(file_path)
+        operators = (add, mul, concat)
+        return sum([eq[0] for eq in equations if is_satisfiable(eq, operators)])
 
 
 if __name__ == '__main__':
-    result1 = part1('puzzle.txt')
-    print(f'The total calibration result is: {result1}')
-
-    result2 = part2('puzzle.txt')
-    print(f'The total calibration result with concatenation is: {result2}')
+    day = Day07()
+    day.print_solution('puzzle.txt')

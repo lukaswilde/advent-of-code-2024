@@ -1,9 +1,12 @@
 import copy
 from enum import Enum, auto
+from pathlib import Path
 
 from geometry import Direction, Grid, Vec2d
 from input import read_input
 from tqdm import tqdm
+
+from template import Day
 
 
 class Map(Grid):
@@ -148,24 +151,25 @@ def calculate_cycle_positions(map: Map) -> int:
     return count
 
 
-def extract_map(file_name: str) -> Map:
-    input_text = read_input(file_name)
+def extract_map(file_path: Path) -> Map:
+    input_text = read_input(file_path)
     return Map(input_text)
 
 
-def part1(file_name: str) -> int:
-    map = extract_map(file_name)
-    return calculate_num_visited(map)
+class Day06(Day):
+    @property
+    def day_number(self) -> int:
+        return 6
 
+    def part1(self, file_path: Path) -> int:
+        map = extract_map(file_path)
+        return calculate_num_visited(map)
 
-def part2(file_name: str) -> int:
-    map = extract_map(file_name)
-    return calculate_cycle_positions(map)
+    def part2(self, file_path: Path) -> int:
+        map = extract_map(file_path)
+        return calculate_cycle_positions(map)
 
 
 if __name__ == '__main__':
-    result1 = part1('puzzle.txt')
-    print(f'Total number of visited tiles: {result1}')
-
-    result2 = part2('puzzle.txt')
-    print(f'Total number of obstacle positions that create a cycle: {result2}')
+    day = Day06()
+    day.print_solution('puzzle.txt')

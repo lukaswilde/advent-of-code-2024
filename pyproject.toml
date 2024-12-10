@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "pathlib>=1.0.1",
-    "ruff>=0.8.2",
     "tqdm>=4.67.1",
 ]
 
@@ -19,3 +18,16 @@ docstring-code-format = true
 
 [tool.ruff.lint]
 extend-select = ["I"]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "src"
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+]
+lint = [
+    "ruff>=0.8.2",
+]

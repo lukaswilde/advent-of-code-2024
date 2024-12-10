@@ -1,17 +1,20 @@
 import re
+from pathlib import Path
 from typing import List
 
 from input import read_input
 
+from template import Day
 
-def extract_muls(file_name: str) -> List[str]:
-    input_text = read_input(file_name)
+
+def extract_muls(file_path: Path) -> List[str]:
+    input_text = read_input(file_path)
     pattern = re.compile(r'mul\(\d{1,3},\d{1,3}\)')
     return re.findall(pattern, input_text)
 
 
-def extract_muls_conditionals(file_name: str) -> List[str]:
-    input_text = read_input(file_name)
+def extract_muls_conditionals(file_path: Path) -> List[str]:
+    input_text = read_input(file_path)
     pattern = re.compile(r"(mul\(\d{1,3},\d{1,3}\)|do\(\)|don't\(\))")
     return re.findall(pattern, input_text)
 
@@ -33,19 +36,20 @@ def calculate_uncorrupted_conditional_sum(muls: List[str]) -> int:
     return calculate_uncorrupted_sum(filtered.split(DELIMITER))
 
 
-def part1(file_name: str) -> int:
-    muls = extract_muls(file_name)
-    return calculate_uncorrupted_sum(muls)
+class Day03(Day):
+    @property
+    def day_number(self) -> int:
+        return 3
 
+    def part1(self, file_path: Path) -> int:
+        muls = extract_muls(file_path)
+        return calculate_uncorrupted_sum(muls)
 
-def part2(file_name: str) -> int:
-    instructions = extract_muls_conditionals(file_name)
-    return calculate_uncorrupted_conditional_sum(instructions)
+    def part2(self, file_path: Path) -> int:
+        instructions = extract_muls_conditionals(file_path)
+        return calculate_uncorrupted_conditional_sum(instructions)
 
 
 if __name__ == '__main__':
-    result1 = part1('puzzle.txt')
-    print(f'Total sum of uncorrupted multiplications: {result1}')
-
-    result2 = part2('puzzle.txt')
-    print(f'Total sum of uncorrupted multiplications and conditionals: {result2}')
+    day = Day03()
+    day.print_solution('puzzle.txt')

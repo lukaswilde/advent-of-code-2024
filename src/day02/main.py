@@ -1,10 +1,13 @@
+from pathlib import Path
 from typing import List
 
 from input import read_input
 
+from template import Day
 
-def extract_reports(file_name: str) -> List[List[int]]:
-    input_text = read_input(file_name)
+
+def extract_reports(file_path: Path) -> List[List[int]]:
+    input_text = read_input(file_path)
     reports = []
 
     for line in input_text.splitlines():
@@ -73,19 +76,20 @@ def calculate_num_almost_safe(reports: List[List[int]]) -> int:
     return sum(map(is_almost_safe, reports))
 
 
-def part1(file_name: str) -> int:
-    reports = extract_reports(file_name)
-    return calculate_num_safe(reports)
+class Day02(Day):
+    @property
+    def day_number(self) -> int:
+        return 2
 
+    def part1(self, file_path: Path) -> int:
+        reports = extract_reports(file_path)
+        return calculate_num_safe(reports)
 
-def part2(file_name: str) -> int:
-    reports = extract_reports(file_name)
-    return calculate_num_almost_safe(reports)
+    def part2(self, file_path: Path) -> int:
+        reports = extract_reports(file_path)
+        return calculate_num_almost_safe(reports)
 
 
 if __name__ == '__main__':
-    result1 = part1('puzzle.txt')
-    print(f'Total number of safe reports: {result1}')
-
-    result2 = part2('puzzle.txt')
-    print(f'Total number of almost safe reports: {result2}')
+    day = Day02()
+    day.print_solution('puzzle.txt')
