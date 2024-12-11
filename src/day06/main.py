@@ -28,24 +28,26 @@ class Map(Grid):
         # For part 2, remember whether tile was visited in the same direction before -> cycle
         self.visited_with_position = set()
 
-        for i, line in enumerate(self.lines):
-            for j, char in enumerate(line):
+        for i in range(self.width):
+            for j in range(self.height):
+                point = Vec2d(i, j)
+                char = self[point]
                 match char:
                     case '.':
                         continue
                     case '#':
-                        self.obstacle_pos.add(Vec2d(j, i))
+                        self.obstacle_pos.add(point)
                     case 'v':
-                        self._guard_pos = Vec2d(j, i)
+                        self._guard_pos = point
                         self._guard_facing = Direction.DOWN
                     case '>':
-                        self._guard_pos = Vec2d(j, i)
+                        self._guard_pos = point
                         self._guard_facing = Direction.RIGHT
                     case '<':
-                        self._guard_pos = Vec2d(j, i)
+                        self._guard_pos = point
                         self._guard_facing = Direction.LEFT
                     case '^':
-                        self._guard_pos = Vec2d(j, i)
+                        self._guard_pos = point
                         self._guard_facing = Direction.UP
 
         self.guard_facing = self._guard_facing

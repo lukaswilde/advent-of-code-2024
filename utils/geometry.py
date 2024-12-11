@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Any, Callable, List
 
 
 class Vec2d:
@@ -30,13 +31,57 @@ class Vec2d:
 
 
 class Grid:
+    """Class representing a 2D grid. Convention is (x,y) coordinates with (0,0) in the upper left corner"""
+
     def __init__(self, repr: str):
         self.lines = repr.splitlines()
         self.width = len(self.lines[0])
         self.height = len(self.lines)
+        self.values = [[''] * self.width for _ in range(self.height)]
+
+        for i, line in enumerate(self.lines):
+            for j, char in enumerate(line):
+                self.values[i][j] = char
+
+    def apply_on_values(self, fn: Callable[[str], Any]):
+        for i in range(self.width):
+            for j in range(self.height):
+                point = Vec2d(i, j)
+                self[point] = fn(self[point])
 
     def out_of_bounds(self, p: Vec2d) -> bool:
         return p.x < 0 or p.y < 0 or p.x >= self.width or p.y >= self.height
+
+    def generate_neighbors(self, p: Vec2d) -> List[Vec2d]:
+        neighbors = []
+        for direction in [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]:
+            possible_neighbor = p + direction.value
+            if not self.out_of_bounds(possible_neighbor):
+                neighbors.append(possible_neighbor)
+
+        return neighbors
+
+    def __setitem__(self, key: Vec2d, value):
+        if self.out_of_bounds(key):
+            raise KeyError(
+                f'Point {str(key)} is not inside the grid with dimensions {self.width} x {self.height}'
+            )
+        self.values[key.y][key.x] = value
+
+    def __getitem__(self, item: Vec2d):
+        """Return value of the point item(x,y)"""
+        if self.out_of_bounds(item):
+            return None
+
+        return self.values[item.y][item.x]
+
+    def dump_values(self):
+        """Print a representation of the values stored in the grid"""
+        for j in range(self.height):
+            line = ''
+            for i in range(self.width):
+                line += str(self[Vec2d(i, j)])
+            print(line)
 
 
 class Direction(Enum):

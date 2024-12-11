@@ -14,11 +14,12 @@ class Map(Grid):
 
         self.antennas = defaultdict(list)
 
-        for i, line in enumerate(self.lines):
-            for j, char in enumerate(line):
-                if char == '.':
-                    continue
-                self.antennas[char].append(Vec2d(i, j))
+        for i in range(self.width):
+            for j in range(self.height):
+                point = Vec2d(i, j)
+                char = self[point]
+                if char != '.':
+                    self.antennas[char].append(point)
 
         self.combinations = self._calculate_combinations()
 
