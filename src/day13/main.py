@@ -1,20 +1,14 @@
-import re
 from pathlib import Path
 from typing import List, Tuple
 
 from geometry import Vec2d
-from input import read_split_input
+from input import extract_vectors, read_split_input
 
 from template import Day
 
 
-def extract_configuration(file_path: Path) -> List[Tuple[Vec2d, Vec2d, Vec2d]]:
+def extract_configuration(file_path: Path) -> List[Tuple[Vec2d, ...]]:
     """Returns a list with entries (A x-y increase, B x-y increase, target x-y)"""
-
-    def extract_coords(line: str) -> Vec2d:
-        matches = re.findall(r'\d+', line)
-        assert len(matches) == 2
-        return Vec2d(int(matches[0]), int(matches[1]))
 
     input_texts = read_split_input(file_path)
     configs = []
@@ -22,12 +16,13 @@ def extract_configuration(file_path: Path) -> List[Tuple[Vec2d, Vec2d, Vec2d]]:
     for text in input_texts:
         lines = text.splitlines()
         assert len(lines) == 3
-        configs.append(tuple(extract_coords(line) for line in lines))
+        configs.append(tuple([vec for line in lines for vec in extract_vectors(line)]))
 
     return configs
 
 
 def find_cheapest_win(config) -> int:
+    print(config)
     da, db, t = config
     cheapest = [
         3 * i + j
