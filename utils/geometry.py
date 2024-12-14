@@ -18,6 +18,10 @@ class Vec2d:
     def __neg__(self):
         return Vec2d(-self.x, -self.y)
 
+    def __mod__(self, other):
+        assert isinstance(other, Vec2d)
+        return Vec2d(self.x % other.x, self.y % other.y)
+
     def __eq__(self, other):
         if not isinstance(other, Vec2d):
             return False
@@ -28,6 +32,9 @@ class Vec2d:
 
     def __repr__(self):
         return f'Vec2d({self.x},{self.y})'
+
+    def multiply(self, scalar: int):
+        return Vec2d(self.x * scalar, self.y * scalar)
 
 
 class Grid:
