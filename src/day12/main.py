@@ -49,23 +49,48 @@ class Map(Grid):
                         inside_region.add(neighbor)
 
 
+def get_area(region: Set[Vec2d]) -> int:
+    return len(region)
+
+
+def get_perimeter(region: Set[Vec2d], map: Map) -> int:
+    perimeter = get_area(region) * 4
+
+    for point in region:
+        char = map[point]
+        for neighbor in map.generate_neighbors(point):
+            if char == map[neighbor]:
+                perimeter -= 1
+
+    return perimeter
+
+
 def calculate_price(map: Map) -> int:
-    def get_area(region: Set[Vec2d]) -> int:
-        return len(region)
-
-    def get_perimeter(region: Set[Vec2d]) -> int:
-        perimeter = get_area(region) * 4
-
-        for point in region:
-            char = map[point]
-            for neighbor in map.generate_neighbors(point):
-                if char == map[neighbor]:
-                    perimeter -= 1
-
-        return perimeter
-
     def calculate_region_price(region: Set[Vec2d]) -> int:
-        return get_perimeter(region) * get_area(region)
+        return get_perimeter(region, map) * get_area(region)
+
+    return sum(
+        [calculate_region_price(region) for regions in map.regions.values() for region in regions]
+    )
+
+
+def calculate_bulk_price(map: Map) -> int:
+    def calculate_region_price(region: Set[Vec2d]) -> int:
+        edges = 0
+        for point in region:
+            for nx, ny, x1, y1, x2, y2 in [
+                (point.x + 1, point.y, point.x, point.y - 1, point.x + 1, point.y - 1),
+                (point.x - 1, point.y, point.x, point.y - 1, point.x - 1, point.y - 1),
+                (point.x, point.y + 1, point.x - 1, point.y, point.x - 1, point.y + 1),
+                (point.x, point.y - 1, point.x - 1, point.y, point.x - 1, point.y - 1),
+            ]:
+                if Vec2d(nx, ny) not in region and not (
+                    Vec2d(x1, y1) in region and Vec2d(x2, y2) not in region
+                ):
+                    edges += 1
+
+        res = edges * get_area(region)
+        return res
 
     return sum(
         [calculate_region_price(region) for regions in map.regions.values() for region in regions]
@@ -83,11 +108,10 @@ class Day12(Day):
         return calculate_price(map)
 
     def part2(self, file_path: Path) -> int:
-        ...
-        # map = extract_map(file_path)
-        # return calculate_price(map)
+        map = extract_map(file_path)
+        return calculate_bulk_price(map)
 
 
 if __name__ == '__main__':
     day = Day12()
-    day.print_solution('example5.txt')
+    day.print_solution('puzzle.txt')

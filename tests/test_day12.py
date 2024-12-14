@@ -11,7 +11,7 @@ from day12.main import Day12
         ('example3.txt', 1930, 1206),
         ('example4.txt', 692, 236),
         ('example5.txt', 1184, 368),
-        ('puzzle.txt', 1518548, None),
+        ('puzzle.txt', 1518548, 909564),
     ],
 )
 def test_input(input, expected1, expected2):
