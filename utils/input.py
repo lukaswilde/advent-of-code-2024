@@ -20,5 +20,5 @@ def get_project_root():
 
 
 def extract_vectors(line: str) -> List[Vec2d]:
-    matches = re.findall(r'\d+', line)
-    return [Vec2d(int(matches[i]), int(matches[i + 1])) for i in range(0, 2, len(matches))]
+    matches = re.findall(r'[-\d]+', line)
+    return [Vec2d(int(matches[i]), int(matches[i + 1])) for i in range(0, len(matches), 2)]
