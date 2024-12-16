@@ -18,37 +18,14 @@ class Map(Grid):
     def __init__(self, repr: str):
         super().__init__(repr)
 
-        self.guard_facing = None
-        self._guard_pos = None
-        self.guard_pos = None
-        self._guard_facing = None
-
-        self.obstacle_pos = set()
         self.visited_tiles = set()
         # For part 2, remember whether tile was visited in the same direction before -> cycle
         self.visited_with_position = set()
 
-        for i in range(self.width):
-            for j in range(self.height):
-                point = Vec2d(i, j)
-                char = self[point]
-                match char:
-                    case '.':
-                        continue
-                    case '#':
-                        self.obstacle_pos.add(point)
-                    case 'v':
-                        self._guard_pos = point
-                        self._guard_facing = Direction.DOWN
-                    case '>':
-                        self._guard_pos = point
-                        self._guard_facing = Direction.RIGHT
-                    case '<':
-                        self._guard_pos = point
-                        self._guard_facing = Direction.LEFT
-                    case '^':
-                        self._guard_pos = point
-                        self._guard_facing = Direction.UP
+        self.obstacle_pos = set(self.find_all('#'))
+
+        self._guard_pos = self.find_first(['v', '>', '<', '^'])
+        self._guard_facing = Direction.from_str(self[self._guard_pos])
 
         self.guard_facing = self._guard_facing
         self.guard_pos = self._guard_pos

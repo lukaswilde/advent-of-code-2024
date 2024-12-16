@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, Callable, List
+from typing import Any, Callable, List, Optional
 
 
 class Vec2d:
@@ -68,6 +68,41 @@ class Grid:
 
         return neighbors
 
+    def swap(self, loc1: Vec2d, loc2: Vec2d):
+        self[loc1], self[loc2] = self[loc2], self[loc1]
+
+    def find_unique(self, target) -> Optional[Vec2d]:
+        assert isinstance(target, type(self[Vec2d(0, 0)]))
+
+        for i in range(self.width):
+            for j in range(self.height):
+                point = Vec2d(i, j)
+                val = self[point]
+                if val == target:
+                    return point
+
+    def find_first(self, targets: List) -> Optional[Vec2d]:
+        assert all([isinstance(target, type(self[Vec2d(0, 0)])) for target in targets])
+
+        for i in range(self.width):
+            for j in range(self.height):
+                point = Vec2d(i, j)
+                val = self[point]
+                if val in targets:
+                    return point
+
+    def find_all(self, target) -> List[Vec2d]:
+        assert isinstance(target, type(self[Vec2d(0, 0)]))
+
+        res = []
+        for i in range(self.width):
+            for j in range(self.height):
+                point = Vec2d(i, j)
+                val = self[point]
+                if val == target:
+                    res.append(point)
+        return res
+
     def __setitem__(self, key: Vec2d, value):
         if self.out_of_bounds(key):
             raise KeyError(
@@ -97,6 +132,21 @@ class Direction(Enum):
     LEFT = Vec2d(-1, 0)
     RIGHT = Vec2d(1, 0)
 
+    @staticmethod
+    def from_str(char: str):
+        assert len(char) == 1
+        assert char in '><v^', f'The char was: {char}'
+
+        match char:
+            case 'v':
+                return Direction.DOWN
+            case '>':
+                return Direction.RIGHT
+            case '<':
+                return Direction.LEFT
+            case '^':
+                return Direction.UP
+
     def rotate_right(self):
         match self:
             case Direction.UP:
@@ -118,3 +168,6 @@ class Direction(Enum):
                 return '<'
             case Direction.RIGHT:
                 return '>'
+
+
+ALL_DIRECTIONS = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]

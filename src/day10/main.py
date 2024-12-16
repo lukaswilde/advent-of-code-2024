@@ -10,14 +10,8 @@ class Map(Grid):
     def __init__(self, repr: str):
         super().__init__(repr)
 
-        self.sources = set()
         self.apply_on_values(int)
-
-        for i in range(self.width):
-            for j in range(self.height):
-                point = Vec2d(i, j)
-                if self[point] == 0:
-                    self.sources.add(point)
+        self.sources = set(self.find_all(0))
 
 
 def extract_height_map(file_path: Path) -> Map:
