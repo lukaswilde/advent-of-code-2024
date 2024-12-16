@@ -69,7 +69,7 @@ class Day14(Day):
         width = max([vec.x for vectors in robots for vec in vectors]) + 1
         height = max([vec.y for vectors in robots for vec in vectors]) + 1
 
-        Path(DIR).mkdir(parents=True, exist_ok=True)
+        Path(DIR).mkdir(parents=True)
 
         for i in range(width * height):
             positions = evolve(robots, width, height, i + 1)
