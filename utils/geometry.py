@@ -18,6 +18,12 @@ class Vec2d:
     def __neg__(self):
         return Vec2d(-self.x, -self.y)
 
+    def __lt__(self, other):
+        assert isinstance(other, Vec2d)
+        if self.x == other.x:
+            return self.y < other.y
+        return self.x < other.x
+
     def __mod__(self, other):
         assert isinstance(other, Vec2d)
         return Vec2d(self.x % other.x, self.y % other.y)
@@ -158,6 +164,13 @@ class Direction(Enum):
             case Direction.LEFT:
                 return Direction.UP
 
+    def rotate_left(self):
+        return self.rotate_right().rotate_right().rotate_right()
+
+    def __lt__(self, other):
+        assert isinstance(other, Direction)
+        return self.value < other.value
+
     def __str__(self):
         match self:
             case Direction.UP:
@@ -168,6 +181,10 @@ class Direction(Enum):
                 return '<'
             case Direction.RIGHT:
                 return '>'
+
+
+def manhattan_distance(p: Vec2d, q: Vec2d) -> int:
+    return abs(p.x - q.x) + abs(p.y - q.y)
 
 
 ALL_DIRECTIONS = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
