@@ -27,7 +27,7 @@ def generate_successors(state: Vec2d, map: Map, limit: int):
     ]
 
 
-def a_star(map: Map, num_obstacles_present: int) -> Optional[int | float]:
+def a_star(map: Map, num_obstacles_present: int) -> Optional[float]:
     """
     Runs A* algorithm on the map. Start position is `map.start`, goal is `map.goal`.
     Returns the cost of a minimum cost path from start to goal. This is guaranteed with an
