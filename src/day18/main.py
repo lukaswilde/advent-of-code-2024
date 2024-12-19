@@ -1,3 +1,4 @@
+import bisect
 from collections import defaultdict
 from heapq import heappop, heappush
 from pathlib import Path
@@ -26,7 +27,7 @@ def generate_successors(state: Vec2d, map: Map, limit: int):
     ]
 
 
-def a_star(map: Map, num_obstacles_present: int) -> Optional[float]:
+def a_star(map: Map, num_obstacles_present: int) -> Optional[int | float]:
     """
     Runs A* algorithm on the map. Start position is `map.start`, goal is `map.goal`.
     Returns the cost of a minimum cost path from start to goal. This is guaranteed with an
@@ -84,24 +85,28 @@ def bin_search_num_obstacles(map: Map) -> Optional[float]:
     Returns this minimal number of obstacles, if there is no way, returns None
     """
 
-    def bin_search(lower: int, upper: int) -> Optional[float]:
-        if lower > upper:
-            return None
+    # def bin_search(lower: int, upper: int) -> Optional[float]:
+    #     if lower > upper:
+    #         return None
+    #
+    #     if lower == upper:
+    #         if a_star(map, lower) is None:
+    #             return lower
+    #         return None
+    #
+    #     pivot = (lower + upper) // 2
+    #     result = a_star(map, pivot)
+    #
+    #     if result is None:
+    #         return bin_search(lower, pivot - 1)
+    #
+    #     return bin_search(pivot + 1, upper)
+    #
+    # coordinate_idx = bin_search(0, len(map.obstacle_pos))
 
-        if lower == upper:
-            if a_star(map, lower) is None:
-                return lower
-            return None
-
-        pivot = (lower + upper) // 2
-        result = a_star(map, pivot)
-
-        if result is None:
-            return bin_search(lower, pivot - 1)
-
-        return bin_search(pivot + 1, upper)
-
-    coordinate_idx = bin_search(0, len(map.obstacle_pos))
+    coordinate_idx = bisect.bisect_left(
+        range(len(map.obstacle_pos)), True, key=lambda limit: a_star(map, limit) is None
+    )
     return map.obstacle_pos[int(coordinate_idx) - 1]
 
 
