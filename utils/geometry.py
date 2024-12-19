@@ -56,6 +56,11 @@ class Grid:
             for j, char in enumerate(line):
                 self.values[i][j] = char
 
+    @classmethod
+    def from_dimensions(cls, width: int, height: int):
+        repr = '\n'.join(['.' * width for _ in range(height)])
+        return cls(repr)
+
     def apply_on_values(self, fn: Callable[[str], Any]):
         for i in range(self.width):
             for j in range(self.height):
