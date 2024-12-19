@@ -33,9 +33,9 @@ def generate_successors(state: Tuple[Vec2d, Direction], map: Map):
     return successors
 
 
-def a_star(map: Map) -> Optional[int | float]:
+def a_star(map: Map) -> Optional[float]:
     """
-    Runs A* algorithm on the map. Start position is `m.start`, goal is `m.goal`.
+    Runs A* algorithm on the map. Start position is `map.start`, goal is `map.goal`.
     Returns the cost of a minimum cost path from start to goal. This is guaranteed with an
     admissible heuristic, which the Manhattan Distance is in a grid setting.
     """
@@ -75,7 +75,7 @@ def a_star(map: Map) -> Optional[int | float]:
 
 def cost_limited_dfs(map: Map, max_cost: int) -> Set[Vec2d]:
     """
-    Runs an exhausting DFS algorithm on the map. Start position is `m.start`, goal is `m.goal`.
+    Runs an exhausting DFS algorithm on the map. Start position is `map.start`, goal is `map.goal`.
     If the goal is found, we do not abort, but add the visited nodes to a set
     that is returned in the end. All visited nodes across all cheapest paths are accumulated.
     """
