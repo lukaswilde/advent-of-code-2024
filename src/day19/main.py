@@ -1,11 +1,6 @@
-import bisect
-from collections import defaultdict
-from heapq import heappop, heappush
 from pathlib import Path
-from typing import Optional, List
 
-from geometry import Grid, Vec2d, manhattan_distance
-from input import extract_vectors, read_input, read_split_input
+from input import read_split_input
 
 from template import Day
 
@@ -13,14 +8,14 @@ from template import Day
 def extract_sections(file_path: Path) -> tuple[set[str], list[str]]:
     input_text = read_split_input(file_path)
     assert len(input_text) == 2
-    patterns = set([pattern for pattern in input_text[0].replace(" " ,"").split(",")])
+    patterns = set([pattern for pattern in input_text[0].replace(' ', '').split(',')])
     designs = [design for design in input_text[1].splitlines()]
     return patterns, designs
 
 
 def calculate_possible(patterns: set[str], designs: list[str]) -> int:
     def is_possible(design: str) -> bool:
-        if design == "":
+        if design == '':
             return False
 
         possible = False
@@ -48,7 +43,7 @@ def calculate_possibilities(patterns: set[str], designs: list[str]) -> int:
         if design in cache:
             return cache[design]
 
-        if design == "":
+        if design == '':
             return 0
 
         count_possible = 0
@@ -69,10 +64,6 @@ def calculate_possibilities(patterns: set[str], designs: list[str]) -> int:
         return count_possible
 
     return sum([num_possibilities(design) for design in designs])
-
-
-
-
 
 
 class Day19(Day):
